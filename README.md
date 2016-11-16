@@ -1,4 +1,4 @@
-# clementine-pause-on-lock
+# pause-on-lock
 Simple script that pauses your music player, when the screen gets locked and resumes playback once the screen is un-locked again.
 
 Currently Supported Players:

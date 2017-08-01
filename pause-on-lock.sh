@@ -6,6 +6,7 @@ dbus-monitor --session "type='signal',interface='com.ubuntu.Upstart0_6'" | \
   CLEMENTINE_PAUSED=0
   SPOTIFY_PAUSED=0
   RHYTHMBOX_PAUSED=0
+  GPMDP_PAUSED=0
 
   while true; do
     read X
@@ -25,6 +26,11 @@ dbus-monitor --session "type='signal',interface='com.ubuntu.Upstart0_6'" | \
       if qdbus org.mpris.MediaPlayer2.rhythmbox /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlaybackStatus 2> /dev/null | grep 'Playing' &> /dev/null; then
         dbus-send --print-reply --dest=org.mpris.MediaPlayer2.rhythmbox /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause &> /dev/null
         RHYTHMBOX_PAUSED=1
+      fi
+      # google play music desktop player
+      if qdbus org.mpris.MediaPlayer2.google-play-music-desktop-player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlaybackStatus 2>/dev/null | grep 'Playing' &> /dev/null; then
+        dbus-send --print-reply --dest=org.mpris.MediaPlayer2.google-play-music-desktop-player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause &> /dev/null
+        GPMDP_PAUSED=1
       fi
     fi
     # resume on unlock
@@ -49,6 +55,11 @@ dbus-monitor --session "type='signal',interface='com.ubuntu.Upstart0_6'" | \
           dbus-send --print-reply --dest=org.mpris.MediaPlayer2.rhythmbox /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Play &> /dev/null
           RHYTHMBOX_PAUSED=0
         fi
+      fi
+      # google play music desktop player
+      if qdbus org.mpris.MediaPlayer2.google-play-music-desktop-player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlaybackStatus | grep 'Paused' &> /dev/null; then
+        dbus-send --print-reply --dest=org.mpris.MediaPlayer2.google-play-music-desktop-player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Play &> /dev/null
+        GPMDP_PAUSED=0
       fi
     fi
   done

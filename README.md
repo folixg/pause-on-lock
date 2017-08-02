@@ -10,4 +10,4 @@ Currently Supported Players:
 Easily extendable for any player that uses the [MPRIS D-Bus Interface](https://specifications.freedesktop.org/mpris-spec/latest/).
 
 
-Tested with Unity on Ubuntu 16.04.
+Tested with Unity on Ubuntu 16.04 and 17.04.

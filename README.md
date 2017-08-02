@@ -5,9 +5,10 @@ Currently Supported Players:
 - [Clementine](https://www.clementine-player.org/)
 - [Spotify](https://www.spotify.com/us/download/linux/)
 - [Rhythmbox](https://wiki.gnome.org/Apps/Rhythmbox)
+- [Quod Libet](https://quodlibet.readthedocs.io/en/latest/)
 - [Google Play Music Desktop Player](https://www.googleplaymusicdesktopplayer.com)
 
 Easily extendable for any player that uses the [MPRIS D-Bus Interface](https://specifications.freedesktop.org/mpris-spec/latest/).
 
 
-Tested with Unity on Ubuntu 16.04.
+Tested with Unity on Ubuntu 16.04 and 17.04.

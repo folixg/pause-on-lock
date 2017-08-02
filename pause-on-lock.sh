@@ -57,9 +57,11 @@ dbus-monitor --session "type='signal',interface='com.ubuntu.Upstart0_6'" | \
         fi
       fi
       # google play music desktop player
-      if qdbus org.mpris.MediaPlayer2.google-play-music-desktop-player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlaybackStatus | grep 'Paused' &> /dev/null; then
-        dbus-send --print-reply --dest=org.mpris.MediaPlayer2.google-play-music-desktop-player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Play &> /dev/null
-        GPMDP_PAUSED=0
+      if [ $GPMDP_PAUSED -eq 1 ] &> /dev/null; then
+        if qdbus org.mpris.MediaPlayer2.google-play-music-desktop-player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlaybackStatus | grep 'Paused' &> /dev/null; then
+          dbus-send --print-reply --dest=org.mpris.MediaPlayer2.google-play-music-desktop-player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Play &> /dev/null
+          GPMDP_PAUSED=0
+        fi
       fi
     fi
   done

@@ -5,6 +5,7 @@ Currently Supported Players:
 - [Clementine](https://www.clementine-player.org/)
 - [Spotify](https://www.spotify.com/us/download/linux/)
 - [Rhythmbox](https://wiki.gnome.org/Apps/Rhythmbox)
+- [Google Play Music Desktop Player](https://www.googleplaymusicdesktopplayer.com)
 
 Easily extendable for any player that uses the [MPRIS D-Bus Interface](https://specifications.freedesktop.org/mpris-spec/latest/).
 

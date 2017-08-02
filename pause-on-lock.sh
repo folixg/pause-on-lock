@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-dbus-monitor --session "type='signal',interface='com.ubuntu.Upstart0_6'" | \
+dbus-monitor --session "type='signal',interface='com.canonical.Unity.Session'" | \
 (
   # variables to check, whether we paused on lock
   CLEMENTINE_PAUSED=0
@@ -11,7 +11,7 @@ dbus-monitor --session "type='signal',interface='com.ubuntu.Upstart0_6'" | \
   while true; do
     read X
     # pause on lock
-    if echo $X | grep 'desktop-lock' &> /dev/null; then
+    if echo $X | grep 'Locked' &> /dev/null; then
       # clementine
       if qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlaybackStatus 2>/dev/null | grep 'Playing' &> /dev/null; then
         dbus-send --print-reply --dest=org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause &> /dev/null
@@ -34,7 +34,7 @@ dbus-monitor --session "type='signal',interface='com.ubuntu.Upstart0_6'" | \
       fi
     fi
     # resume on unlock
-    if echo $X | grep 'desktop-unlock' &> /dev/null; then
+    if echo $X | grep 'Unlocked' &> /dev/null; then
       # clemetine
       if [ $CLEMENTINE_PAUSED -eq 1 ] &> /dev/null; then
         if qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlaybackStatus | grep 'Paused' &> /dev/null; then

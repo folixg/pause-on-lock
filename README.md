@@ -1,7 +1,10 @@
 # pause-on-lock
 Simple script that pauses your music player, when the screen gets locked and resumes playback once the screen is un-locked again.
 
-Currently Supported Players:
+If you have [playerctl](https://github.com/acrisci/playerctl) installed (which I
+recommend), it supports all players that playerctl can handle.
+
+Without playerctl the following players are supported:
 - [Clementine](https://www.clementine-player.org/)
 - [Spotify](https://www.spotify.com/us/download/linux/)
 - [Rhythmbox](https://wiki.gnome.org/Apps/Rhythmbox)

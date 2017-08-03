@@ -6,6 +6,7 @@ Currently Supported Players:
 - [Spotify](https://www.spotify.com/us/download/linux/)
 - [Rhythmbox](https://wiki.gnome.org/Apps/Rhythmbox)
 - [Quod Libet](https://quodlibet.readthedocs.io/en/latest/)
+- [Google Play Music Desktop Player](https://www.googleplaymusicdesktopplayer.com)
 
 Easily extendable for any player that uses the [MPRIS D-Bus Interface](https://specifications.freedesktop.org/mpris-spec/latest/).
 

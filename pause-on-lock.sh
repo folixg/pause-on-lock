@@ -37,16 +37,16 @@ dbus-monitor --session "type='signal',interface='com.canonical.Unity.Session'" |
         # did we pause a player on lock?
         if [ "$PAUSED_PLAYER" != "none" ]; then
           playerctl --player="$PAUSED_PLAYER" play
-          PAUSED_PLAYER="none"
         fi
       # without playerctl
       else
         # did we pause on lock?
         if [ "$PAUSED_PLAYER" = "rhythmbox" ] ; then
           dbus-send --print-reply --dest=org.mpris.MediaPlayer2.rhythmbox /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Play &> /dev/null
-          PAUSED_PLAYER="none"          
         fi
       fi
+      # reset PAUSED_PLAYER variable
+      PAUSED_PLAYER="none"
     fi
   done
 )

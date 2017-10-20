@@ -24,7 +24,7 @@ dbus-monitor --session "type='signal',interface='com.canonical.Unity.Session'" |
         done
       # without playerctl  
       else
-        if qdbus org.mpris.MediaPlayer2.rhythmbox /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlaybackStatus 2> /dev/null | grep 'Playing' &> /dev/null; then
+        if  dbus-send --print-reply --dest=org.mpris.MediaPlayer2.rhythmbox /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:'org.mpris.MediaPlayer2.Player' string:'PlaybackStatus' 2>/dev/null | grep 'Playing' &> /dev/null; then
           dbus-send --print-reply --dest=org.mpris.MediaPlayer2.rhythmbox /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause &> /dev/null
           PAUSED_PLAYER="rhythmbox"
         fi

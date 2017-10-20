@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-dbus-monitor --session "type='signal',interface='com.canonical.Unity.Session'" | \
+dbus-monitor --session "type='signal',interface='org.gnome.ScreenSaver',member=ActiveChanged" | \
 (
   # variable to check, whether we paused on lock
   PAUSED_PLAYER="none"
@@ -8,7 +8,7 @@ dbus-monitor --session "type='signal',interface='com.canonical.Unity.Session'" |
   while true; do
     read X
     # pause on lock
-    if echo "$X" | grep 'Locked' &> /dev/null; then
+    if echo "$X" | grep 'true' &> /dev/null; then
       # with playerctl
       if [ "$(playerctl --version 2>/dev/null)" ]; then
         # get list of running players
@@ -31,7 +31,7 @@ dbus-monitor --session "type='signal',interface='com.canonical.Unity.Session'" |
       fi
     fi
     # resume on unlock
-    if echo "$X" | grep 'Unlocked' &> /dev/null; then
+    if echo "$X" | grep 'false' &> /dev/null; then
       # with playerctl
       if [ "$(playerctl --version 2>/dev/null)" ]; then
         # did we pause a player on lock?

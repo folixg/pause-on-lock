@@ -20,19 +20,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-if [ "$1" == "--unity" ] || [ "$1" == "-u" ] ; then
+if [ "$XDG_CURRENT_DESKTOP" == "Unity" ] ; then
   DBUS_LOCK="interface='com.canonical.Unity.Session'"
   LOCK_SIGNAL="Locked"
   UNLOCK_SIGNAL="Unlocked"
-elif [ "$1" == "--gnome" ] ||  [ "$1" == "-g" ] ; then
+# use wildcards to catch "GNOME" and "ubuntu:GNOME"
+elif [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]] ; then
   DBUS_LOCK="interface='org.gnome.ScreenSaver',member='ActiveChanged'"
   LOCK_SIGNAL="true"
   UNLOCK_SIGNAL="false"
 else
-echo "Please specify the desktop you are using.
-Available options:
- -u --unity : Unity
- -g --gnome : GNOME"
+echo "Error: Unsupported desktop. Supported desktops are Unity and GNOME."
 exit 0
 fi
 dbus-monitor --session "type='signal',$DBUS_LOCK" | \

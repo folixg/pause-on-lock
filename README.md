@@ -14,12 +14,19 @@ If you want support for more players, you can install [playerctl](https://github
 If playerctl is installed pause-on-lock supports all players that playerctl
 can handle.
 
+
+### Installation
+You can download the [latest release](https://github.com/folixg/pause-on-lock/releases/latest)
+either as deb-package or as source tarball.
+In order to install the packages version run `sudo dpkg -i pause-on-lock_1.1-0ubuntu1.deb`,
+this will install the binary to `/usr/bin/`.
+If you don't want to use the packaged version, donwload the sources and put the
+executable in a directory of your choosing.
+
 ### Usage
-1. Download the [latest release](https://github.com/folixg/pause-on-lock/releases/latest)
-2. Extract the archive to a directory of your choosing.
-3. Add the pause-on-lock executable to [Startup Applications](https://help.ubuntu.com/stable/ubuntu-help/startup-applications.html),
+Simply run `pause-on-lock`, there is no further configuration needed.
+I strongly recommend to add the pause-on-lock executable to [Startup Applications](https://help.ubuntu.com/stable/ubuntu-help/startup-applications.html),
 so it is run every time you log in.
-4. Log out and back in again.
 
 
 Tested with Ubuntu 16.04, 17.04 and 17.10.

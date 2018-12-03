@@ -3,9 +3,9 @@ Simple script that pauses your music player, when the screen gets locked and
 resumes playback once the screen is unlocked again.
 
 ### Supported desktop environments
-Currently [Unity](https://launchpad.net/unity) and [GNOME](https://www.gnome.org/)
-are supported. The currently running desktop is detected using
-`$XDG_CURRENT_DESKTOP`.
+Currently [Unity](https://launchpad.net/unity), [Cinnamon](https://github.com/linuxmint/Cinnamon)
+and [GNOME](https://www.gnome.org/) are supported. The currently running
+desktop is detected using `$XDG_CURRENT_DESKTOP`.
 
 ### Supported players
 By default pause-on-lock supports [Rhythmbox](https://wiki.gnome.org/Apps/Rhythmbox)

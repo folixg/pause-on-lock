@@ -29,8 +29,12 @@ elif [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]] ; then
   DBUS_LOCK="interface='org.gnome.ScreenSaver',member='ActiveChanged'"
   LOCK_SIGNAL="true"
   UNLOCK_SIGNAL="false"
+elif [ "$XDG_CURRENT_DESKTOP" == "X-Cinnamon" ] ; then
+  DBUS_LOCK="interface='org.cinnamon.ScreenSaver',member='ActiveChanged'"
+  LOCK_SIGNAL="true"
+  UNLOCK_SIGNAL="false"
 else
-echo "Error: Unsupported desktop. Supported desktops are Unity and GNOME."
+echo "Error: Unsupported desktop. Supported desktops are Unity, GNOME and Cinnamon."
 exit 0
 fi
 dbus-monitor --session "type='signal',$DBUS_LOCK" | \

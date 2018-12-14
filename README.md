@@ -29,4 +29,4 @@ I strongly recommend to add the pause-on-lock executable to [Startup Application
 so it is run every time you log in.
 
 
-Tested with Ubuntu 16.04, 17.04 and 17.10.
+Tested with Ubuntu 16.04, 17.04, 17.10 and 18.04.

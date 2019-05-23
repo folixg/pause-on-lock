@@ -17,11 +17,11 @@ can handle.
 
 ### Installation
 You can download the [latest release](https://github.com/folixg/pause-on-lock/releases/latest)
-either as deb-package or as source tarball.
-In order to install the packages version run `sudo dpkg -i pause-on-lock_1.1-0ubuntu1.deb`,
-this will install the binary to `/usr/bin/`.
-If you don't want to use the packaged version, donwload the sources and put the
-executable in a directory of your choosing.
+as source tarball.
+Simply extract the sources to a directory of your choosing
+(e.g. `/opt/pause-on-lock`). If you don't want to use the absolute path to run
+pause-on-lock, make sure to create a symlink to the executable in a folder
+that is in your `$PATH` (e.g. `ln -s /opt/pause-on-lock/pause-on-lock $HOME/bin`). 
 
 ### Usage
 Simply run `pause-on-lock`, there is no further configuration needed.
@@ -29,4 +29,4 @@ I strongly recommend to add the pause-on-lock executable to [Startup Application
 so it is run every time you log in.
 
 
-Tested with Ubuntu 16.04, 17.04 and 17.10.
+Should run with all Ubuntu releases >= 16.04

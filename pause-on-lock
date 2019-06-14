@@ -30,11 +30,11 @@ elif [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]] ; then
   LOCK_SIGNAL="true"
   UNLOCK_SIGNAL="false"
 elif [ "$XDG_CURRENT_DESKTOP" == "X-Cinnamon" ] ; then
-  DBUS_LOCK="interface='org.mate.ScreenSaver',member='ActiveChanged'"
+  DBUS_LOCK="interface='org.x-cinnamon.ScreenSaver',member='ActiveChanged'"
   LOCK_SIGNAL="true"
   UNLOCK_SIGNAL="false"
 elif [ "$XDG_CURRENT_DESKTOP" == "MATE" ] ; then
-  DBUS_LOCK="interface='org.cinnamon.ScreenSaver',member='ActiveChanged'"
+  DBUS_LOCK="interface='org.mate.ScreenSaver',member='ActiveChanged'"
   LOCK_SIGNAL="true"
   UNLOCK_SIGNAL="false"
 else

@@ -3,8 +3,7 @@ Simple script that pauses your music player, when the screen gets locked and
 resumes playback once the screen is unlocked again.
 
 ### Supported desktop environments
-Currently [Unity](https://launchpad.net/unity), [Cinnamon](https://github.com/linuxmint/Cinnamon)
-and [GNOME](https://www.gnome.org/) are supported. The currently running
+Currently [Unity](https://launchpad.net/unity), [Cinnamon](https://github.com/linuxmint/Cinnamon), [GNOME](https://www.gnome.org/) and [MATE](https://mate-desktop.org/) are supported. The currently running
 desktop is detected using `$XDG_CURRENT_DESKTOP`.
 
 ### Supported players

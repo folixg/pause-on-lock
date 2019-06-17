@@ -38,7 +38,7 @@ elif [ "$XDG_CURRENT_DESKTOP" == "MATE" ] ; then
   LOCK_SIGNAL="true"
   UNLOCK_SIGNAL="false"
 else
-echo "Error: Unsupported desktop. Supported desktops are Unity, GNOME and Cinnamon."
+echo "Error: Unsupported desktop. Supported desktops are Unity, GNOME, Cinnamon and Mate."
 exit 0
 fi
 dbus-monitor --session "type='signal',$DBUS_LOCK" | \

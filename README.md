@@ -1,4 +1,7 @@
+![logo](header.png)
+
 # pause-on-lock
+
 Simple script that pauses your music player, when the screen gets locked and
 resumes playback once the screen is unlocked again.
 
@@ -20,7 +23,7 @@ as source tarball.
 Simply extract the sources to a directory of your choosing
 (e.g. `/opt/pause-on-lock`). If you don't want to use the absolute path to run
 pause-on-lock, make sure to create a symlink to the executable in a folder
-that is in your `$PATH` (e.g. `ln -s /opt/pause-on-lock/pause-on-lock $HOME/bin`). 
+that is in your `$PATH` (e.g. `ln -s /opt/pause-on-lock/pause-on-lock $HOME/bin`).
 
 ### Usage
 Simply run `pause-on-lock`, there is no further configuration needed.

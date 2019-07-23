@@ -54,13 +54,14 @@ dbus-monitor --session "type='signal',$DBUS_LOCK" | \
   PLAYER="org.mpris.MediaPlayer2.Player"
   
   while true; do
-    read X
+    read -r X
     # pause on lock
     if echo "$X" | grep "$LOCK_SIGNAL" &> /dev/null; then
       # with playerctl
       if [ "$(playerctl --version 2>/dev/null)" ]; then
         # get list of running players
-        read -a players <<< $(playerctl --list-all)
+        # shellcheck disable=SC2046
+        read -r -a players <<< $(playerctl --list-all)
         # check whether a player is playing
         for player in "${players[@]}"
         do

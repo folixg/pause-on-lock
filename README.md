@@ -16,8 +16,8 @@ supported. The currently running desktop is detected using
 ## Supported players
 
 By default pause-on-lock supports
-[Rhythmbox](https://wiki.gnome.org/Apps/Rhythmbox) and
-[Spotify](https://www.spotify.com/us/download/linux/). If you want support
+[Rhythmbox](https://wiki.gnome.org/Apps/Rhythmbox), 
+[Spotify](https://www.spotify.com/us/download/linux/) and [VLC](https://www.videolan.org/vlc/index.html). If you want support
 for more players, you can install
 [playerctl](https://github.com/acrisci/playerctl). If playerctl is installed
 pause-on-lock supports all players that playerctl can handle.

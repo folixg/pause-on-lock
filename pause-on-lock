@@ -48,6 +48,7 @@ dbus-monitor --session "type='signal',$DBUS_LOCK" | \
   # D-Bus objects, methods, etc. we need to controll Rhythmbox
   RHYTHMBOX="org.mpris.MediaPlayer2.rhythmbox"
   SPOTIFY="org.mpris.MediaPlayer2.spotify"
+  VLC="org.mpris.MediaPlayer2.vlc"
   MEDIAPLAYER="/org/mpris/MediaPlayer2"
   GET_PROPERTIES="org.freedesktop.DBus.Properties.Get"
   PLAYER="org.mpris.MediaPlayer2.Player"
@@ -83,6 +84,12 @@ dbus-monitor --session "type='signal',$DBUS_LOCK" | \
           dbus-send --print-reply --dest="$SPOTIFY" "$MEDIAPLAYER" \
             "$PLAYER".Pause &> /dev/null
           PAUSED_PLAYER="spotify"
+        elif  dbus-send --print-reply --dest="$VLC" "$MEDIAPLAYER" \
+          "$GET_PROPERTIES" string:$PLAYER string:'PlaybackStatus' | \
+          grep 'Playing' &> /dev/null; then
+          dbus-send --print-reply --dest="$VLC" "$MEDIAPLAYER" \
+            "$PLAYER".Pause &> /dev/null
+          PAUSED_PLAYER="vlc"
         fi
       fi
     fi
@@ -102,6 +109,9 @@ dbus-monitor --session "type='signal',$DBUS_LOCK" | \
             "$PLAYER".Play &> /dev/null
         elif [ "$PAUSED_PLAYER" = "spotify" ] ; then
           dbus-send --print-reply --dest="$SPOTIFY" "$MEDIAPLAYER" \
+            "$PLAYER".Play &> /dev/null
+        elif [ "$PAUSED_PLAYER" = "vlc" ] ; then
+          dbus-send --print-reply --dest="$VLC" "$MEDIAPLAYER" \
             "$PLAYER".Play &> /dev/null
         fi
       fi

@@ -9,9 +9,9 @@ resumes playback once the screen is unlocked again.
 
 Currently [Unity](https://launchpad.net/unity),
 [Cinnamon](https://github.com/linuxmint/Cinnamon),
-[GNOME](https://www.gnome.org/) and [MATE](https://mate-desktop.org/) are
-supported. The currently running desktop is detected using
-`$XDG_CURRENT_DESKTOP`.
+[GNOME](https://www.gnome.org/), [MATE](https://mate-desktop.org/) and 
+[KDE](https://kde.org/) are supported. The currently running desktop is
+detected using `$XDG_CURRENT_DESKTOP`.
 
 ## Supported players
 
@@ -39,4 +39,4 @@ so it is run every time you log in.
 
 ## Compatibility
 
-Should run with all Ubuntu releases >= 16.04
+Should work with all Ubuntu releases >= 16.04

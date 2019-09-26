@@ -37,8 +37,12 @@ elif [ "$XDG_CURRENT_DESKTOP" == "MATE" ] ; then
   DBUS_LOCK="interface='org.mate.ScreenSaver',member='ActiveChanged'"
   LOCK_SIGNAL="true"
   UNLOCK_SIGNAL="false"
+elif [ "$XDG_CURRENT_DESKTOP" == "KDE" ] ; then
+  DBUS_LOCK="interface='org.freedesktop.ScreenSaver',member='ActiveChanged'"
+  LOCK_SIGNAL="true"
+  UNLOCK_SIGNAL="false"
 else
-echo "Error: Unsupported desktop. Supported desktops are Unity, GNOME, Cinnamon and Mate."
+echo "Error: Unsupported desktop. Supported desktops are Unity, GNOME, Cinnamon, Mate and KDE."
 exit 0
 fi
 dbus-monitor --session "type='signal',$DBUS_LOCK" | \

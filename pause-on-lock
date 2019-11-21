@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Copyright (c) 2016 Thomas Goldbrunner
+# Copyright (c) 2016-2019 Thomas Goldbrunner
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +20,48 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
+VERSION="1.5.1"
+RELEASE_DATE="2019-11-21"
+
+# print usage information
+function __print_help {
+  echo "Usage: \$ pause-on-lock [option]"
+  echo ""
+  echo "Options:"
+  echo ""
+  echo "    -h        print this help text and exit"
+  echo "    -v        print version information and exit"
+  echo ""
+  echo "For more information visit https://github.com/folixg/pause-on-lock"
+  echo ""
+}
+
+# parse command line options
+if [ $# -gt 0 ] ; then
+  if [ $# -gt 1 ] ; then
+    echo "Error: Only one command line option is allowed."
+    echo ""
+    __print_help
+    exit 1
+  fi
+  if [ "$1" == "-h" ] ; then
+    __print_help
+    exit 0
+  elif [ "$1" == "-v" ] ; then
+    echo "This is pause-on-lock $VERSION (released $RELEASE_DATE)"
+    echo ""
+    exit 0
+  else
+    echo "Error: Invalid command line option."
+    echo ""
+    __print_help
+    exit 1
+  fi
+else
+  exit 0
+fi
+
+
 if [ "$XDG_CURRENT_DESKTOP" == "Unity" ] ; then
   DBUS_LOCK="interface='com.canonical.Unity.Session'"
   LOCK_SIGNAL="Locked"
@@ -43,7 +85,7 @@ elif [ "$XDG_CURRENT_DESKTOP" == "KDE" ] ; then
   UNLOCK_SIGNAL="false"
 else
 echo "Error: Unsupported desktop. Supported desktops are Unity, GNOME, Cinnamon, Mate and KDE."
-exit 0
+exit 1
 fi
 dbus-monitor --session "type='signal',$DBUS_LOCK" | \
 (

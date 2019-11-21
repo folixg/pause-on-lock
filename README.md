@@ -2,8 +2,8 @@
 
 # pause-on-lock
 
-Simple script that pauses your music player, when the screen gets locked and
-resumes playback once the screen is unlocked again.
+Automatically pause your music player when the screen gets locked and resume
+playback, once the screen is unlocked again.
 
 ## Supported desktop environments
 
@@ -24,12 +24,16 @@ pause-on-lock supports all players that playerctl can handle.
 
 ## Installation
 
-Simply download the executable for the [latest
-release](https://github.com/folixg/pause-on-lock/releases/latest) and put it
-in a directory of your choosing (e.g. `$HOME/bin`). If you don't want to use
-the absolute path to run pause-on-lock, make sure that the folder is in your
-`$PATH`. You might need to set the executable bit with `chmod +x
-pause-on-lock`.
+Download the executable for the [latest
+release](https://github.com/folixg/pause-on-lock/releases/latest) and run
+
+```
+sudo install pause-on-lock /usr/local/bin/
+```
+
+If you don't have sudo rights or don't want a system-wide installation, change
+the install destination directory to e.g. `$HOME/bin` (and make sure that that
+folder is in your `$PATH`).
 
 ## Usage
 

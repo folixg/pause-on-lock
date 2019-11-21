@@ -36,4 +36,13 @@ The two basic rules for the coding style are:
 
 Other than that, try to make [shellcheck](https://github.com/koalaman/shellcheck) happy.
 
+## Repository layout
+
+Starting after 06419d159170e5bd548c8fe23e8e318328944aa3 the repository uses the
+branching model as described
+[here](https://nvie.com/posts/a-successful-git-branching-model/).  That means
+the [master](https://github.com/folixg/pause-on-lock/tree/master) branch will
+only contain tagged commits and all feature branches should be based on the
+[develop](https://github.com/folixg/pause-on-lock/tree/develop) branch.
+
 Thanks again for contributing!

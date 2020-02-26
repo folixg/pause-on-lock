@@ -40,14 +40,18 @@ GET_PROPERTIES="org.freedesktop.DBus.Properties.Get"
 # variable to check, whether we paused on lock
 PAUSED_PLAYER="none"
 
+# variable indicating whether to use playerctl
+PLAYERCTL=false
+
 # print usage information
 __print_help() {
   echo "Usage: \$ pause-on-lock [option]"
   echo ""
   echo "Options:"
   echo ""
-  echo "    -h        print this help text and exit"
-  echo "    -v        print version information and exit"
+  echo "    -c|--playerctl     enable playerctl support"
+  echo "    -h|--help          print this help text and exit"
+  echo "    -v|--version       print version information and exit"
   echo ""
   echo "For more information visit https://github.com/folixg/pause-on-lock"
   echo ""
@@ -71,28 +75,32 @@ __resume_player() {
 }
 
 # parse command line options
-if [ $# -gt 0 ] ; then
-  if [ $# -gt 1 ] ; then
-    echo "Error: Only one command line option is allowed."
-    echo ""
-    __print_help
-    exit 1
-  fi
-  if [ "$1" == "-h" ] ; then
-    __print_help
-    exit 0
-  elif [ "$1" == "-v" ] ; then
-    echo "This is pause-on-lock $VERSION (released $RELEASE_DATE)"
-    echo ""
-    exit 0
-  else
-    echo "Error: Invalid command line option."
-    echo ""
-    __print_help
-    exit 1
-  fi
-fi
-
+while (( "$#" )); do
+  case "$1" in
+    -h|--help)
+      __print_help
+      exit 0
+      ;;
+    -v|--version)
+      echo "This is pause-on-lock $VERSION (released $RELEASE_DATE)"
+      exit 0
+      ;;
+    -c|--playerctl)
+      # check if playerctl is available on the system
+      if [ ! "$(playerctl --version 2>/dev/null)" ]; then
+        echo "Error: failed to execute playerctl."
+        exit 1
+      fi
+      PLAYERCTL=true
+      shift
+      ;;
+    *)
+      echo "Error: Unknown flag $1"
+      echo "Run \"pause-on-lock --help\" for help."
+      exit 1
+      ;;
+  esac
+done
 
 if [ "${desktops[$XDG_CURRENT_DESKTOP]}" == "" ]; then
   echo "Error: Unsupported desktop. Supported desktops are Unity, GNOME, Cinnamon, Mate and KDE."
@@ -107,6 +115,7 @@ else
   LOCK_SIGNAL="true"
   UNLOCK_SIGNAL="false"
 fi
+
 dbus-monitor --session "type='signal',$DBUS_LOCK" | \
 (
   while true; do
@@ -114,7 +123,7 @@ dbus-monitor --session "type='signal',$DBUS_LOCK" | \
     # pause on lock
     if echo "$X" | grep "$LOCK_SIGNAL" &> /dev/null; then
       # with playerctl
-      if [ "$(playerctl --version 2>/dev/null)" ]; then
+      if $PLAYERCTL; then
         # get list of running players
         read -r -a players <<< "$(playerctl --list-all)"
         # check whether a player is playing

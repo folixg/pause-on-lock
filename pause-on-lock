@@ -26,6 +26,12 @@ RELEASE_DATE="2019-11-21"
 # Players we want to control
 players=(rhythmbox spotify)
 
+# Array of supported desktops used to specify DBUS interface
+declare -A desktops=( ["Unity"]="interface='com.canonical.Unity.Session'"
+                      ["GNOME"]="gnome" ["ubuntu:GNOME"]="gnome"
+                      ["X-Cinnamon"]="cinnamon" ["MATE"]="mate"
+                      ["KDE"]="freedesktop" )
+
 # D-Bus objects, methods, etc. needed to controll MPRIS players
 PLAYER="org.mpris.MediaPlayer2"
 MEDIAPLAYER="/org/mpris/MediaPlayer2"
@@ -88,30 +94,21 @@ if [ $# -gt 0 ] ; then
 fi
 
 
+if [ "${desktops[$XDG_CURRENT_DESKTOP]}" == "" ]; then
+  echo "Error: Unsupported desktop. Supported desktops are Unity, GNOME, Cinnamon, Mate and KDE."
+  exit 1
+fi
 if [ "$XDG_CURRENT_DESKTOP" == "Unity" ] ; then
-  DBUS_LOCK="interface='com.canonical.Unity.Session'"
+  DBUS_LOCK="${desktops[$XDG_CURRENT_DESKTOP]}"
   LOCK_SIGNAL="Locked"
   UNLOCK_SIGNAL="Unlocked"
 else
+  DBUS_LOCK="interface='org.${desktops[$XDG_CURRENT_DESKTOP]}.ScreenSaver',member='ActiveChanged'"
   LOCK_SIGNAL="true"
   UNLOCK_SIGNAL="false"
-# use wildcards to catch "GNOME" and "ubuntu:GNOME"
-  if [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]] ; then
-    DBUS_LOCK="interface='org.gnome.ScreenSaver',member='ActiveChanged'"
-  elif [ "$XDG_CURRENT_DESKTOP" == "X-Cinnamon" ] ; then
-    DBUS_LOCK="interface='org.cinnamon.ScreenSaver',member='ActiveChanged'"
-  elif [ "$XDG_CURRENT_DESKTOP" == "MATE" ] ; then
-    DBUS_LOCK="interface='org.mate.ScreenSaver',member='ActiveChanged'"
-  elif [ "$XDG_CURRENT_DESKTOP" == "KDE" ] ; then
-    DBUS_LOCK="interface='org.freedesktop.ScreenSaver',member='ActiveChanged'"
-  else
-    echo "Error: Unsupported desktop. Supported desktops are Unity, GNOME, Cinnamon, Mate and KDE."
-    exit 1
-  fi
 fi
 dbus-monitor --session "type='signal',$DBUS_LOCK" | \
 (
-
   while true; do
     read -r X
     # pause on lock
@@ -129,7 +126,7 @@ dbus-monitor --session "type='signal',$DBUS_LOCK" | \
             PAUSED_PLAYER=$player
           fi
         done
-      # # without playerctl
+      # without playerctl
       else
         for player in "${players[@]}"; do
           if __is_playing "$player"; then

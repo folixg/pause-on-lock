@@ -16,7 +16,8 @@ detected using `$XDG_CURRENT_DESKTOP`.
 ## Installation
 
 Download the executable for the [latest
-release](https://github.com/folixg/pause-on-lock/releases/latest) and run
+release](https://github.com/folixg/pause-on-lock/releases/download/v2.0.0/pause-on-lock)
+and run
 
 ```
 sudo install pause-on-lock /usr/local/bin/
@@ -24,7 +25,7 @@ sudo install pause-on-lock /usr/local/bin/
 
 If you don't have sudo rights or don't want a system-wide installation, change
 the install destination directory to e.g. `$HOME/bin` (and make sure that that
-folder is in your `$PATH`).>
+folder is in your `$PATH`).
 
 ## Usage
 

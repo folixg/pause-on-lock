@@ -9,18 +9,9 @@ playback, once the screen is unlocked again.
 
 Currently [Unity](https://launchpad.net/unity),
 [Cinnamon](https://github.com/linuxmint/Cinnamon),
-[GNOME](https://www.gnome.org/), [MATE](https://mate-desktop.org/) and 
+[GNOME](https://www.gnome.org/), [MATE](https://mate-desktop.org/) and
 [KDE](https://kde.org/) are supported. The currently running desktop is
 detected using `$XDG_CURRENT_DESKTOP`.
-
-## Supported players
-
-By default pause-on-lock supports
-[Rhythmbox](https://wiki.gnome.org/Apps/Rhythmbox) and
-[Spotify](https://www.spotify.com/us/download/linux/). If you want support
-for more players, you can install
-[playerctl](https://github.com/acrisci/playerctl). If playerctl is installed
-pause-on-lock supports all players that playerctl can handle.
 
 ## Installation
 
@@ -33,14 +24,43 @@ sudo install pause-on-lock /usr/local/bin/
 
 If you don't have sudo rights or don't want a system-wide installation, change
 the install destination directory to e.g. `$HOME/bin` (and make sure that that
-folder is in your `$PATH`).
+folder is in your `$PATH`).>
 
 ## Usage
 
-Simply run `pause-on-lock`, there is no further configuration needed.
-I strongly recommend to add the pause-on-lock executable to [Startup Applications](https://help.ubuntu.com/stable/ubuntu-help/startup-applications.html),
-so it is run every time you log in.
+### Rhythmbox and Spotify
 
-## Compatibility
+By default pause-on-lock supports
+[Rhythmbox](https://wiki.gnome.org/Apps/Rhythmbox) and
+[Spotify](https://www.spotify.com/us/download/linux/). If you use no other
+players, no further configuration is needed, you can simply run
+`pause-on-lock`.
 
-Should work with all Ubuntu releases >= 16.04
+### User defined player
+
+With the `--player` or `-p` flag you can provide the name of one additional
+player that pause-on-lock will then handle. The player needs to provide a
+[MPRIS](http://specifications.freedesktop.org/mpris-spec/latest/) D-Bus
+interface (which is the case for most common media players) and the name you
+provide needs to match the name used for the D-Bus interface. For example
+[vlc](https://videolan.org) provides a D-Bus interface at
+`org.mpris.MediaPlayer2.vlc` so all you need to do is call `pause-on-lock -p
+vlc` and pause-on-lock will pause any running vlc instance when you lock your
+screen.
+
+**tl;dr** `pause-on-lock --player NAME` should work in most cases.
+
+### Playerctl
+
+If you want support for many different players and you have
+[playerctl](https://github.com/acrisci/playerctl) installed, you can use the
+`--playerctl` or `-c` flag to enable playerctl support in pause-on-lock. Then
+all players that playerctl can handle are supported, without the need for 
+further configuration.
+
+### Autostart
+
+I strongly recommend to add the pause-on-lock executable to [Startup
+Applications](https://help.ubuntu.com/stable/ubuntu-help/startup-applications.html)
+(or the equivalent for your desktop environment), so it is run every time you
+log in.

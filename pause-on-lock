@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Copyright (c) 2016-2019 Thomas Goldbrunner
+# Copyright (c) 2016-2020 Thomas Goldbrunner
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,8 +23,25 @@
 VERSION="1.5.2"
 RELEASE_DATE="2019-11-21"
 
+# Players we want to control
+players=(rhythmbox spotify)
+
+# Array of supported desktops used to specify DBUS interface
+declare -A desktops=( ["Unity"]="interface='com.canonical.Unity.Session'"
+                      ["GNOME"]="gnome" ["ubuntu:GNOME"]="gnome"
+                      ["X-Cinnamon"]="cinnamon" ["MATE"]="mate"
+                      ["KDE"]="freedesktop" )
+
+# D-Bus objects, methods, etc. needed to controll MPRIS players
+PLAYER="org.mpris.MediaPlayer2"
+MEDIAPLAYER="/org/mpris/MediaPlayer2"
+GET_PROPERTIES="org.freedesktop.DBus.Properties.Get"
+
+# variable to check, whether we paused on lock
+PAUSED_PLAYER="none"
+
 # print usage information
-function __print_help {
+__print_help() {
   echo "Usage: \$ pause-on-lock [option]"
   echo ""
   echo "Options:"
@@ -34,6 +51,23 @@ function __print_help {
   echo ""
   echo "For more information visit https://github.com/folixg/pause-on-lock"
   echo ""
+}
+
+__is_playing() {
+  dbus-send --print-reply --dest="$PLAYER.$1" "$MEDIAPLAYER" \
+    "$GET_PROPERTIES" string:"$PLAYER.Player" string:'PlaybackStatus' 2>/dev/null | \
+    grep 'Playing' &> /dev/null
+}
+
+__pause_player() {
+  dbus-send --print-reply --dest="$PLAYER.$1" "$MEDIAPLAYER" \
+    "$PLAYER.Player.Pause" &> /dev/null
+    PAUSED_PLAYER="$1"
+}
+
+__resume_player() {
+  dbus-send --print-reply --dest="$PLAYER.$1" "$MEDIAPLAYER" \
+    "$PLAYER.Player.Play" &> /dev/null
 }
 
 # parse command line options
@@ -60,42 +94,21 @@ if [ $# -gt 0 ] ; then
 fi
 
 
+if [ "${desktops[$XDG_CURRENT_DESKTOP]}" == "" ]; then
+  echo "Error: Unsupported desktop. Supported desktops are Unity, GNOME, Cinnamon, Mate and KDE."
+  exit 1
+fi
 if [ "$XDG_CURRENT_DESKTOP" == "Unity" ] ; then
-  DBUS_LOCK="interface='com.canonical.Unity.Session'"
+  DBUS_LOCK="${desktops[$XDG_CURRENT_DESKTOP]}"
   LOCK_SIGNAL="Locked"
   UNLOCK_SIGNAL="Unlocked"
-# use wildcards to catch "GNOME" and "ubuntu:GNOME"
-elif [[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]] ; then
-  DBUS_LOCK="interface='org.gnome.ScreenSaver',member='ActiveChanged'"
-  LOCK_SIGNAL="true"
-  UNLOCK_SIGNAL="false"
-elif [ "$XDG_CURRENT_DESKTOP" == "X-Cinnamon" ] ; then
-  DBUS_LOCK="interface='org.cinnamon.ScreenSaver',member='ActiveChanged'"
-  LOCK_SIGNAL="true"
-  UNLOCK_SIGNAL="false"
-elif [ "$XDG_CURRENT_DESKTOP" == "MATE" ] ; then
-  DBUS_LOCK="interface='org.mate.ScreenSaver',member='ActiveChanged'"
-  LOCK_SIGNAL="true"
-  UNLOCK_SIGNAL="false"
-elif [ "$XDG_CURRENT_DESKTOP" == "KDE" ] ; then
-  DBUS_LOCK="interface='org.freedesktop.ScreenSaver',member='ActiveChanged'"
-  LOCK_SIGNAL="true"
-  UNLOCK_SIGNAL="false"
 else
-echo "Error: Unsupported desktop. Supported desktops are Unity, GNOME, Cinnamon, Mate and KDE."
-exit 1
+  DBUS_LOCK="interface='org.${desktops[$XDG_CURRENT_DESKTOP]}.ScreenSaver',member='ActiveChanged'"
+  LOCK_SIGNAL="true"
+  UNLOCK_SIGNAL="false"
 fi
 dbus-monitor --session "type='signal',$DBUS_LOCK" | \
 (
-  # variable to check, whether we paused on lock
-  PAUSED_PLAYER="none"
-  # D-Bus objects, methods, etc. we need to controll Rhythmbox
-  RHYTHMBOX="org.mpris.MediaPlayer2.rhythmbox"
-  SPOTIFY="org.mpris.MediaPlayer2.spotify"
-  MEDIAPLAYER="/org/mpris/MediaPlayer2"
-  GET_PROPERTIES="org.freedesktop.DBus.Properties.Get"
-  PLAYER="org.mpris.MediaPlayer2.Player"
-  
   while true; do
     read -r X
     # pause on lock
@@ -113,41 +126,20 @@ dbus-monitor --session "type='signal',$DBUS_LOCK" | \
             PAUSED_PLAYER=$player
           fi
         done
-      # without playerctl  
+      # without playerctl
       else
-        if  dbus-send --print-reply --dest="$RHYTHMBOX" "$MEDIAPLAYER" \
-          "$GET_PROPERTIES" string:$PLAYER string:'PlaybackStatus' | \
-          grep 'Playing' &> /dev/null; then
-          dbus-send --print-reply --dest="$RHYTHMBOX" "$MEDIAPLAYER" \
-            "$PLAYER".Pause &> /dev/null
-          PAUSED_PLAYER="rhythmbox"
-        elif  dbus-send --print-reply --dest="$SPOTIFY" "$MEDIAPLAYER" \
-          "$GET_PROPERTIES" string:$PLAYER string:'PlaybackStatus' | \
-          grep 'Playing' &> /dev/null; then
-          dbus-send --print-reply --dest="$SPOTIFY" "$MEDIAPLAYER" \
-            "$PLAYER".Pause &> /dev/null
-          PAUSED_PLAYER="spotify"
-        fi
+        for player in "${players[@]}"; do
+          if __is_playing "$player"; then
+            __pause_player "$player"
+          fi
+        done
       fi
     fi
     # resume on unlock
     if echo "$X" | grep "$UNLOCK_SIGNAL" &> /dev/null; then
-      # with playerctl
-      if [ "$(playerctl --version 2>/dev/null)" ]; then
-        # did we pause a player on lock?
-        if [ "$PAUSED_PLAYER" != "none" ]; then
-          playerctl --player="$PAUSED_PLAYER" play
-        fi
-      # without playerctl
-      else
-        # did we pause on lock?
-        if [ "$PAUSED_PLAYER" = "rhythmbox" ] ; then
-          dbus-send --print-reply --dest="$RHYTHMBOX" "$MEDIAPLAYER" \
-            "$PLAYER".Play &> /dev/null
-        elif [ "$PAUSED_PLAYER" = "spotify" ] ; then
-          dbus-send --print-reply --dest="$SPOTIFY" "$MEDIAPLAYER" \
-            "$PLAYER".Play &> /dev/null
-        fi
+      # did we pause on lock?
+      if [ "$PAUSED_PLAYER" != "none" ] ; then
+        __resume_player "$PAUSED_PLAYER"
       fi
       # reset PAUSED_PLAYER variable
       PAUSED_PLAYER="none"

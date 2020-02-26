@@ -23,6 +23,23 @@
 VERSION="1.5.2"
 RELEASE_DATE="2019-11-21"
 
+__is_playing() {
+  dbus-send --print-reply --dest="$INTERFACE.$1" "$OBJPATH" \
+    "$GET_PROPERTIES" string:"$INTERFACE.Player" string:'PlaybackStatus' 2>/dev/null | \
+    grep 'Playing' &> /dev/null
+}
+
+__pause_player() {
+  dbus-send --print-reply --dest="$INTERFACE.$1" "$OBJPATH" \
+    "$INTERFACE.Player.Pause" &> /dev/null
+    PAUSED_PLAYER="$1"
+}
+
+__resume_player() {
+  dbus-send --print-reply --dest="$INTERFACE.$1" "$OBJPATH" \
+    "$INTERFACE.Player.Play" &> /dev/null
+}
+
 # Players we want to control
 players=(rhythmbox spotify)
 
@@ -32,9 +49,9 @@ declare -A desktops=( ["Unity"]="interface='com.canonical.Unity.Session'"
                       ["X-Cinnamon"]="cinnamon" ["MATE"]="mate"
                       ["KDE"]="freedesktop" )
 
-# D-Bus objects, methods, etc. needed to controll MPRIS players
-PLAYER="org.mpris.MediaPlayer2"
-MEDIAPLAYER="/org/mpris/MediaPlayer2"
+# D-Bus interface, object path and method needed to control MPRIS players
+INTERFACE="org.mpris.MediaPlayer2"
+OBJPATH="/org/mpris/MediaPlayer2"
 GET_PROPERTIES="org.freedesktop.DBus.Properties.Get"
 
 # variable to check, whether we paused on lock
@@ -43,42 +60,20 @@ PAUSED_PLAYER="none"
 # variable indicating whether to use playerctl
 PLAYERCTL=false
 
-# print usage information
-__print_help() {
-  echo "Usage: \$ pause-on-lock [option]"
-  echo ""
-  echo "Options:"
-  echo ""
-  echo "    -c|--playerctl     enable playerctl support"
-  echo "    -h|--help          print this help text and exit"
-  echo "    -v|--version       print version information and exit"
-  echo ""
-  echo "For more information visit https://github.com/folixg/pause-on-lock"
-  echo ""
-}
-
-__is_playing() {
-  dbus-send --print-reply --dest="$PLAYER.$1" "$MEDIAPLAYER" \
-    "$GET_PROPERTIES" string:"$PLAYER.Player" string:'PlaybackStatus' 2>/dev/null | \
-    grep 'Playing' &> /dev/null
-}
-
-__pause_player() {
-  dbus-send --print-reply --dest="$PLAYER.$1" "$MEDIAPLAYER" \
-    "$PLAYER.Player.Pause" &> /dev/null
-    PAUSED_PLAYER="$1"
-}
-
-__resume_player() {
-  dbus-send --print-reply --dest="$PLAYER.$1" "$MEDIAPLAYER" \
-    "$PLAYER.Player.Play" &> /dev/null
-}
-
 # parse command line options
 while (( "$#" )); do
   case "$1" in
     -h|--help)
-      __print_help
+      echo "Usage: \$ pause-on-lock [option]"
+      echo ""
+      echo "Options:"
+      echo ""
+      echo "    -c|--playerctl     enable playerctl support"
+      echo "    -h|--help          print this help text and exit"
+      echo "    -v|--version       print version information and exit"
+      echo ""
+      echo "For more information visit https://github.com/folixg/pause-on-lock"
+      echo ""
       exit 0
       ;;
     -v|--version)

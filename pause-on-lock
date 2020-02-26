@@ -40,9 +40,6 @@ __resume_player() {
     "$INTERFACE.Player.Play" &> /dev/null
 }
 
-# Players we want to control
-players=(rhythmbox spotify)
-
 # Array of supported desktops used to specify DBUS interface
 declare -A desktops=( ["Unity"]="interface='com.canonical.Unity.Session'"
                       ["GNOME"]="gnome" ["ubuntu:GNOME"]="gnome"
@@ -68,6 +65,7 @@ while (( "$#" )); do
       echo ""
       echo "Options:"
       echo ""
+      echo "    -p|--player NAME   set the player to pause on lock"
       echo "    -c|--playerctl     enable playerctl support"
       echo "    -h|--help          print this help text and exit"
       echo "    -v|--version       print version information and exit"
@@ -79,6 +77,10 @@ while (( "$#" )); do
     -v|--version)
       echo "This is pause-on-lock $VERSION (released $RELEASE_DATE)"
       exit 0
+      ;;
+    -p|--player)
+      USER_PLAYER="$2"
+      shift 2
       ;;
     -c|--playerctl)
       # check if playerctl is available on the system
@@ -96,6 +98,9 @@ while (( "$#" )); do
       ;;
   esac
 done
+
+# Players we want to control
+players=("$USER_PLAYER" rhythmbox spotify)
 
 if [ "${desktops[$XDG_CURRENT_DESKTOP]}" == "" ]; then
   echo "Error: Unsupported desktop. Supported desktops are Unity, GNOME, Cinnamon, Mate and KDE."

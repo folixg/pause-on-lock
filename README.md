@@ -9,14 +9,15 @@ playback, once the screen is unlocked again.
 
 Currently [Unity](https://launchpad.net/unity),
 [Cinnamon](https://github.com/linuxmint/Cinnamon),
-[GNOME](https://www.gnome.org/), [MATE](https://mate-desktop.org/) and
-[KDE](https://kde.org/) are supported. The currently running desktop is
+[GNOME](https://www.gnome.org/), [MATE](https://mate-desktop.org/),
+[KDE](https://kde.org/), [POP!\_OS](https://pop.system76.com) and
+[XFCE](https://www.xfce.org) are supported. The currently running desktop is
 detected using `$XDG_CURRENT_DESKTOP`.
 
 ## Installation
 
 Download the executable for the [latest
-release](https://github.com/folixg/pause-on-lock/releases/download/v2.0.0/pause-on-lock)
+release](https://github.com/folixg/pause-on-lock/releases/download/v2.1.0/pause-on-lock)
 and run
 
 ```

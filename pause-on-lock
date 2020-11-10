@@ -44,7 +44,8 @@ __resume_player() {
 declare -A desktops=( ["Unity"]="interface='com.canonical.Unity.Session'"
                       ["GNOME"]="gnome" ["ubuntu:GNOME"]="gnome"
                       ["X-Cinnamon"]="cinnamon" ["MATE"]="mate"
-                      ["KDE"]="freedesktop" )
+                      ["KDE"]="freedesktop" ["pop:GNOME"]="gnome"
+                      ["XFCE"]="xfce" )
 
 # D-Bus interface, object path and method needed to control MPRIS players
 INTERFACE="org.mpris.MediaPlayer2"

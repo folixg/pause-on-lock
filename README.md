@@ -4,7 +4,8 @@
  listening to music on your spotify or whatever you do). It's still an early
  release and I'd be happy if you gave it a try and let me know if something
  doesn't work for you.
- You can find visit the [github page](https://github.com/folixg/python-pauseonlock)
+
+ You can visit the [github page](https://github.com/folixg/python-pauseonlock)
  or just install via `pip install pauseonlock`
 
 ![logo](header.png)

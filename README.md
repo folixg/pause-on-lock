@@ -1,3 +1,12 @@
+*Notice:* I did a rewrite in python which can handle more players (probably your
+ favorite among them) by default and is also able to handle multiple players
+ running at the same time (like if your watching a video in your browser and
+ listening to music on your spotify or whatever you do). It's still an early
+ release and I'd be happy if you gave it a try and let me know if something
+ doesn't work for you.
+ You can find visit the [github page](https://github.com/folixg/python-pauseonlock)
+ or just install via `pip install pauseonlock`
+
 ![logo](header.png)
 
 # pause-on-lock
@@ -57,7 +66,7 @@ screen.
 If you want support for many different players and you have
 [playerctl](https://github.com/acrisci/playerctl) installed, you can use the
 `--playerctl` or `-c` flag to enable playerctl support in pause-on-lock. Then
-all players that playerctl can handle are supported, without the need for 
+all players that playerctl can handle are supported, without the need for
 further configuration.
 
 ### Autostart
